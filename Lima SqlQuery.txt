@@ -1,0 +1,129 @@
+CREATE TABLE admin(
+	admin_id int(5) primary key auto_increment,
+     	firstName varchar(50),
+       	lastName varchar(50),
+       	email varchar(50),
+     	mobile varchar(50),
+     	password varchar(600)
+);
+
+CREATE TABLE student(
+	stud_id int(5) primary key auto_increment,
+	firstName varchar(50),
+  	lastName varchar(50),
+  	email varchar(50), 
+	mobile varchar(10),
+	password varchar(30)
+);
+
+
+create table request ( 
+	req_id int(5) primary key auto_increment,
+	stud_id int(5),
+	book_id int(5),
+	status int(5),
+	FOREIGN KEY(stud_id) REFERENCES student(stud_id),	
+	FOREIGN KEY(book_id) REFERENCES books(book_id)
+);
+
+
+create table issued_book(
+	srNo int(5) primary key auto_increment,
+        stud_id int(5) not null,
+        book_id int(5) not null,
+        start_date Date,
+        end_date Date,
+        status int(5) not null,
+        foreign key(stud_id) references student(stud_id),
+        foreign key(book_id) references books(book_id)
+);
+
+
+create table feedback(
+	feed_id int(5) primary key auto_increment,	
+	stud_id int(5),
+	book_id int(5),
+	feedback varchar(900),
+	createdTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+	foreign key(stud_id) references	student(stud_id),
+	foreign key(book_id) references book(book_id)
+);
+
+create table book(
+	book_id int(5) primary key auto_increment,
+	book_name varchar(60) not null,
+	book_category varchar(50) not null,
+	author varchar(50) not null,
+	publisher varchar(50) not null,
+	book_price double(8,3) not null,
+	book_image varchar(100) not null,
+	book_pdf varchar(200) not null,
+	flag int(5) not null,
+	description varchar(600)
+);
+
+
+
+
++---------------+       +--------------+       +-------------------+
+|    Admin      |       |    Student   |       |      Request      |
++---------------+       +--------------+       +-------------------+
+| - admin_id    |       | - stud_id FK |       | - req_id          |
+| - firstName   |       | - firstName  |       | - stud_id FK      |
+| - lastName    |       | - lastName   |       | - book_id FK      |
+| - email       |       | - email      |       | - status          |
+| - mobile      |       | - mobile     |       |                   |
+| - password    |       | - password   |       |                   |
++---------------+       +--------------+       +-------------------+
+        |                        |                         |
+        |                        |                         |
+        |                        |                         |
+        +------------------------|-------------------------+
+                                 |
+                                 |
+                        +------------------+
+                        |    IssuedBook    |
+                        +------------------+
+                        | - srNo           |
+                        | - stud_id FK     |
+                        | - book_id FK     |
+                        | - start_date     |
+                        | - end_date       |
+                        | - status         |
+                        +------------------+
+                                 |
+                                 |
+                        +------------------+
+                        |    Feedback      |
+                        +------------------+
+                        | - feed_id        |
+                        | - stud_id FK     |
+                        | - book_id FK     |
+                        | - feedback       |
+                        | - createdTimestamp |
+                        +------------------+
+                                 |
+                                 |
+                        +------------------+
+                        |     Books        |
+                        +------------------+
+                        | - book_id        |
+                        | - book_name      |
+                        | - book_category  |
+                        | - author         |
+                        | - publisher      |
+                        | - book_price     |
+                        | - book_image     |
+                        | - book_pdf       |
+                        | - description    |
+                        +------------------+
+
+
+
+
+
+
+
+
+
