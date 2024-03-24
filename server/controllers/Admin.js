@@ -45,18 +45,21 @@ export const Asignin = async (req, res) => {
 //2. Adding Book
 
 export const addBook = async (req, res) => {
+  console.log("inside add book.");
   try {
     const {
-      book_name,
-      book_category,
+      bookName,
+      bookCategory,
       author,
       publisher,
-      book_price,
-      description,
+      bookPrice,
+      description
     } = req.body;
+    const flag = 2;
+    console.log("flag is " + flag);
 
-    const imageName = req.files.book_image[0].filename;
-    const pdfName = req.files.book_pdf[0].filename;
+    const imageName = req.files.bookImage[0].filename;
+    const pdfName = req.files.bookPdf[0].filename;
 
     console.log(imageName);
     console.log(pdfName);
@@ -65,9 +68,9 @@ export const addBook = async (req, res) => {
 
     const statement = `
       insert into book
-      (book_name,book_category,author,publisher,book_price,book_image,description,book_pdf) 
+      (book_name,book_category,author,publisher,book_price,book_image,description,book_pdf,flag) 
    values
-   ('${book_name}','${book_category}','${author}','${publisher}','${book_price}','${imageName}','${description}','${pdfName}')`;
+   ('${bookName}','${bookCategory}','${author}','${publisher}','${bookPrice}','${imageName}','${description}','${pdfName}', '${flag}')`;
 
     (await connection).query(statement, async (error, books) => {
       if (error) {
@@ -82,6 +85,7 @@ export const addBook = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ status: "error", error: error.message });
+    
   }
 };
 
@@ -479,3 +483,45 @@ export const issueBook = async (req, res) => {
     res.status(500).json({ status: "error", error: error.message });
   }
 };
+
+
+//14. View By Category
+export const viewCategory = async (req, res) => {
+  try {
+    const { category } = req.params;
+    const connection = db.openConnection2();
+
+    const statement = `
+    select
+    bookId,
+    book_name,
+    book_category,
+    author,
+    publisher,
+    book_price
+   from book
+   where book_category = '${category}'
+    `;
+
+    (await connection).query(statement, async (error, result) => {
+      if (error) {
+        (await connection).end();
+        return res.status(400).json({ status: "error", error: error.message });
+      } else {
+       if(result.length === 0){
+        (await connection).end();
+        return res.status(404).json({ status: "error", message: `Book not found of ${category} category .` });     
+       }
+       else{
+        var data = [];
+        data.push(result);
+        (await connection).end();
+        return res.status(200).json({ status: "success", data });
+      }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ status: "error", error: error.message });
+  }
+};
+

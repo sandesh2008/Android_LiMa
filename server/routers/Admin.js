@@ -1,11 +1,11 @@
 import express from "express";
 import multer from "multer";
-import { Asignin, acceptRequest, addBook, addStudent, allRequests, deleteBook, deleteStudent, feedback, issueBook, retrieveBook, viewBooks, viewIssuedBooks, viewStudents } from "../controllers/Admin.js";
+import { Asignin, acceptRequest, addBook, addStudent, allRequests, deleteBook, deleteStudent, feedback, issueBook, retrieveBook, viewBooks, viewCategory, viewIssuedBooks, viewStudents } from "../controllers/Admin.js";
 import { issuedBooks } from "../controllers/Student.js";
 
 const upload = multer({dest : 'uploads'});
 
-const fileUpload = upload.fields([{ name: 'book_image',maxCount:1 },{ name: 'book_pdf',maxCount:1 }])
+const fileUpload = upload.fields([{ name: 'bookImage',maxCount:1 },{ name: 'bookPdf',maxCount:1 }])
 
 
 const router = express.Router();
@@ -37,6 +37,9 @@ router.route("/acceptRequest/:req_id").delete(acceptRequest);
 //router.route("/issueRequest").put(acceptRequest);
 //13
 router.route("/issueBook").post(issueBook);
+
+//14
+router.route("/byCategory/:category").get(viewCategory);
 
 
 

@@ -7,51 +7,27 @@ CREATE TABLE admin(
      	password varchar(600)
 );
 
+
+INSERT INTO admin (firstName, lastName, email, mobile, password)
+VALUES ('Suraj', 'Shinde', 'surajshinde@example.com', '1234567890', 'Suraj@123');
+
+ALTER TABLE admin
+CHANGE COLUMN admin_id adminId int(5) primary key auto_increment;
+
+
+
 CREATE TABLE student(
-	stud_id int(5) primary key auto_increment,
+	studId int(5) primary key auto_increment,
 	firstName varchar(50),
   	lastName varchar(50),
   	email varchar(50), 
 	mobile varchar(10),
-	password varchar(30)
+	password varchar(600)
 );
 
-
-create table request ( 
-	req_id int(5) primary key auto_increment,
-	stud_id int(5),
-	book_id int(5),
-	status int(5),
-	FOREIGN KEY(stud_id) REFERENCES student(stud_id),	
-	FOREIGN KEY(book_id) REFERENCES books(book_id)
-);
-
-
-create table issued_book(
-	srNo int(5) primary key auto_increment,
-        stud_id int(5) not null,
-        book_id int(5) not null,
-        start_date Date,
-        end_date Date,
-        status int(5) not null,
-        foreign key(stud_id) references student(stud_id),
-        foreign key(book_id) references books(book_id)
-);
-
-
-create table feedback(
-	feed_id int(5) primary key auto_increment,	
-	stud_id int(5),
-	book_id int(5),
-	feedback varchar(900),
-	createdTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-
-	foreign key(stud_id) references	student(stud_id),
-	foreign key(book_id) references book(book_id)
-);
 
 create table book(
-	book_id int(5) primary key auto_increment,
+	bookId int(5) primary key auto_increment,
 	book_name varchar(60) not null,
 	book_category varchar(50) not null,
 	author varchar(50) not null,
@@ -62,6 +38,42 @@ create table book(
 	flag int(5) not null,
 	description varchar(600)
 );
+
+
+create table request ( 
+	req_id int(5) primary key auto_increment,
+	studId int(5),
+	bookId int(5),
+	status int(5),
+	FOREIGN KEY(studId) REFERENCES student(studId),	
+	FOREIGN KEY(bookId) REFERENCES book(bookId)
+);
+
+
+create table issued_book(
+	srNo int(5) primary key auto_increment,
+        studId int(5) not null,
+        bookId int(5) not null,
+        start_date Date,
+        end_date Date,
+        status int(5) not null,
+        foreign key(studId) references student(studId),
+        foreign key(bookId) references book(bookId)
+);
+
+
+create table feedback(
+	feed_id int(5) primary key auto_increment,	
+	studId int(5),
+	bookId int(5),
+	feedback varchar(900),
+	createdTimestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+	foreign key(studId) references student(studId),
+	foreign key(bookId) references book(bookId)
+);
+
+
 
 
 
